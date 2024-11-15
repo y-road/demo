@@ -1,6 +1,7 @@
-package com.song.app.demointro2.di
+package com.song.app.demointro2.di.module
 
 import com.song.app.demointro2.BuildConfig
+import com.song.app.demointro2.data.network.TokenAPIService
 import com.song.app.demointro2.data.url.Url
 import dagger.Module
 import dagger.Provides
@@ -17,13 +18,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    // Gson
     @Singleton
     @Provides
     fun provideGsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
 
+    // OkHttp
     @Singleton
     @Provides
-    fun provideOkHttpClient():  OkHttpClient {
+    fun provideOkHttpClient(): OkHttpClient {
         val interceptor = HttpLoggingInterceptor()
         if (BuildConfig.DEBUG) {
             interceptor.level = HttpLoggingInterceptor.Level.BODY // 요청 및 응답 본문까지 모두 로깅
@@ -36,14 +39,22 @@ object NetworkModule {
             .build()
     }
 
+    // Retrofit
     @Singleton
     @Provides
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
-        gsonConverterFactory: GsonConverterFactory
+        gsonConverterFactory: GsonConverterFactory,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(Url.API_SERVER_URL)
         .addConverterFactory(gsonConverterFactory)
         .client(okHttpClient)
         .build()
+
+    // TokenAPIService
+    @Singleton
+    @Provides
+    fun provideTokenAPIService(retrofit: Retrofit): TokenAPIService =
+        retrofit.create(TokenAPIService::class.java)
+
 }

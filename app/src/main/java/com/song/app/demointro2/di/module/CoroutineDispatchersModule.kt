@@ -1,25 +1,24 @@
-package com.song.app.demointro2.di
+package com.song.app.demointro2.di.module
 
-import com.song.app.demointro2.di.qualifier.IoDispatcher
-import com.song.app.demointro2.di.qualifier.MainDispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class CoroutineDispatchersModule {
 
-    @IoDispatcher
+    @Named("IoDispatcher")
     @Singleton
     @Provides
     fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
-    @MainDispatcher
+    @Named("MainDispatcher")
     @Singleton
     @Provides
     fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main

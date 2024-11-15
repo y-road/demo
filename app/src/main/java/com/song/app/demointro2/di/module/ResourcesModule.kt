@@ -1,4 +1,4 @@
-package com.song.app.demointro2.di
+package com.song.app.demointro2.di.module
 
 import android.content.Context
 import com.song.app.demointro2.util.provider.ResourcesProvider
